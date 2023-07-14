@@ -1,16 +1,21 @@
-import { useState } from "react";
 import "./App.css";
+import DATA from "./database/gsLosses";
+import GSLossesTable from "./components/container/GSLossesTable";
+
 
 function App() {
-	const [show, setShow] = useState("true");
-	console.log(typeof show);
-	console.log(typeof show);
+	
+	function handleClick(e) {
+		let table = e.target.closest('div.tableContainer').querySelector('table');
+		table.hidden = !table.hidden;
+	}
+
 	return (
-		<>
-			<p>show: {show.toString()}</p>
-			<button onClick={() => setShow(true)}>Show</button>
-			<button onClick={() => setShow(false)}>Hide</button>
-		</>
+		<div className="tableContainer">		
+			<button onClick={handleClick}>Show/Hide Table</button>
+			{<GSLossesTable gsLosses={DATA} />}			
+		</div>
+		
 	);
 }
 
