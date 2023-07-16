@@ -40,7 +40,6 @@ th {
 	color: #012030;
 	font-size: 22px;
 	user-select: none;
-	
 }
 th:hover {
 	cursor: pointer;
@@ -52,7 +51,7 @@ th {
 	margin: 0;
 	white-space: nowrap;
 	border: 1px solid black;
-	transition: all 0.05s linear;
+	/* transition: all 0.05s linear; */
 }
 
 td:last-child,th:last-child {
