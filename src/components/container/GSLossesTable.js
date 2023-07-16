@@ -4,6 +4,14 @@ export default function GSLossesTable(props) {
 	const [ascending, setAscending] = useState(false);
 
 	useEffect(() => {
+		const tableBoundaryValues = {
+			minPosValue: null,
+			maxPosValue: null,
+			minNegValue: null,
+			maxNegValue: null,
+			maxPosPoint: null,
+			maxNegPoint: null,
+		};
 		let tableStyle = {};
 		//event for sorting the table
 		myRef.current.addEventListener("mouseover", (e) => {
@@ -13,14 +21,17 @@ export default function GSLossesTable(props) {
 				Array.from(myRef.current.tBodies[0].rows).forEach((row) => {
 					Array.from(row.cells).forEach((cell) => {
 						if (cell.cellIndex === targetCellIndex) {
-							cell.style.backgroundColor = "#b0ddc2";
+							cell.style.backgroundColor = "#8A8CF2";
+							
 						}
 					});
 				});
 				Array.from(target.closest("tr").cells).forEach((cell) => {
-					cell.style.backgroundColor = "#b0ddc2";
+					cell.style.backgroundColor = "#8A8CF2";
+				
 				});
-				target.style.backgroundColor = "#46a46c";
+				target.style.backgroundColor = "#4144F0";
+				
 			}
 		});
 
@@ -31,31 +42,97 @@ export default function GSLossesTable(props) {
 				Array.from(myRef.current.tBodies[0].rows).forEach((row) => {
 					Array.from(row.cells).forEach((cell) => {
 						if (cell.cellIndex === targetCellIndex) {
-							cell.style.backgroundColor = "";
+							// cell.style.backgroundColor = "";
+							cell.style.backgroundColor = cell.getAttribute('customBackgroundColor');
 						}
 					});
 				});
 				Array.from(target.closest("tr").cells).forEach((cell) => {
-					cell.style.backgroundColor = "";
+					// cell.style.backgroundColor = "";
+					cell.style.backgroundColor = cell.getAttribute('customBackgroundColor');
 				});
-				target.style.backgroundColor = "";
+				// target.style.backgroundColor = "";
+				target.style.backgroundColor = target.getAttribute('customBackgroundColor');
 			}
 		});
 
 		Array.from(myRef.current.rows).forEach((row) => {
 			Array.from(row.cells).forEach((cell) => {
 				let cellContent = Number.parseFloat(cell.textContent);
-				if (cellContent && cellContent < 0) {
-					cell.style.color = "red";
-				}
+				// if (cellContent && cellContent < 0) {
+				// 	cell.style.color = "red";
+				// }
+				//initialize tableBoundaryValues object and calculate minmax values
+				if (cellContent && cell.cellIndex < row.cells.length - 1) {
+					if (cellContent >= 0) {
+						if (!tableBoundaryValues.minPosValue) {
+							tableBoundaryValues.minPosValue = cellContent;
+						} else {
+							if (cellContent < tableBoundaryValues.minPosValue) {
+								tableBoundaryValues.minPosValue = cellContent;
+							}
+						}
 
+						if (!tableBoundaryValues.maxPosValue) {
+							tableBoundaryValues.maxPosValue = cellContent;
+						} else {
+							if (cellContent > tableBoundaryValues.maxPosValue) {
+								tableBoundaryValues.maxPosValue = cellContent;
+							}
+						}
+					} else {
+						if (!tableBoundaryValues.minNegValue) {
+							tableBoundaryValues.minNegValue = cellContent;
+						} else {
+							if (cellContent > tableBoundaryValues.minNegValue) {
+								tableBoundaryValues.minNegValue = cellContent;
+							}
+						}
+
+						if (!tableBoundaryValues.maxNegValue) {
+							tableBoundaryValues.maxNegValue = cellContent;
+						} else {
+							if (cellContent < tableBoundaryValues.maxNegValue) {
+								tableBoundaryValues.maxNegValue = cellContent;
+							}
+						}
+					}
+				}
 				if ((tableStyle.maxCellWidth || 0) < cell.offsetWidth) {
 					tableStyle.maxCellWidth = cell.offsetWidth;
 				}
 			});
+		});
+		//set max negative and positive points
+		tableBoundaryValues.maxPosPoint = tableBoundaryValues.maxPosValue - tableBoundaryValues.minPosValue;
+		tableBoundaryValues.maxNegPoint = tableBoundaryValues.maxNegValue - tableBoundaryValues.minNegValue;
+		console.log(tableBoundaryValues);
+
+		Array.from(myRef.current.rows).forEach((row) => {
 			Array.from(row.cells).forEach((cell) => {
+				let cellContent = Number.parseFloat(cell.textContent);
+				if (cellContent && cell.cellIndex < row.cells.length - 1) {
+					if (cellContent >= 0) {
+						let xValue = (cellContent - tableBoundaryValues.minPosValue) / tableBoundaryValues.maxPosPoint;
+						let backgroundColor = `hsla(120,100%,${100 - Math.round(xValue * 50)}%, 1)`;
+						cell.style.backgroundColor = backgroundColor;
+						cell.setAttribute('customBackgroundColor',backgroundColor);
+					} else {
+						let xValue = (cellContent - tableBoundaryValues.minNegValue) / tableBoundaryValues.maxNegPoint;
+						let backgroundColor = `hsla(0,100%,${100 - Math.round(xValue * 50)}%,1)`;
+						cell.style.backgroundColor = backgroundColor;
+						cell.setAttribute('customBackgroundColor',backgroundColor);
+					}
+				}
+			});
+
+			// set styles based on minmax numbers
+			Array.from(row.cells).forEach((cell) => {
+				let cellContent = Number.parseFloat(cell.textContent);
+				if (!Number.isFinite(cellContent)) {
+					cell.style.fontWeight = "bold";
+				}
 				cell.style.width = tableStyle.maxCellWidth + "px";
-				
 				if (cell.cellIndex > 1 && row.rowIndex !== 0) {
 					cell.style.textAlign = "right";
 				}
@@ -71,6 +148,7 @@ export default function GSLossesTable(props) {
 		theads.push(<th>{prop}</th>);
 	}
 	theads.push(<th>Total</th>);
+
 	let rows = [];
 	data.forEach((station) => {
 		let td = [];
@@ -108,9 +186,8 @@ export default function GSLossesTable(props) {
 		}
 	}
 
-	
 	return (
-		<table ref={myRef} onClick={handleSorting} >
+		<table ref={myRef} onClick={handleSorting}>
 			<thead>
 				<tr>{theads}</tr>
 			</thead>
