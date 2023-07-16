@@ -21,17 +21,15 @@ export default function GSLossesTable(props) {
 				Array.from(myRef.current.tBodies[0].rows).forEach((row) => {
 					Array.from(row.cells).forEach((cell) => {
 						if (cell.cellIndex === targetCellIndex) {
-							cell.style.backgroundColor = "#8A8CF2";
-							
+							cell.style.backgroundColor = "#CFCEFB";
 						}
 					});
 				});
 				Array.from(target.closest("tr").cells).forEach((cell) => {
-					cell.style.backgroundColor = "#8A8CF2";
+					cell.style.backgroundColor = "#CFCEFB";
 				
 				});
-				target.style.backgroundColor = "#4144F0";
-				
+				target.style.backgroundColor = "#9993FA";
 			}
 		});
 
@@ -130,7 +128,7 @@ export default function GSLossesTable(props) {
 			Array.from(row.cells).forEach((cell) => {
 				let cellContent = Number.parseFloat(cell.textContent);
 				if (!Number.isFinite(cellContent)) {
-					cell.style.fontWeight = "bold";
+					// cell.style.fontWeight = "bold";
 				}
 				cell.style.width = tableStyle.maxCellWidth + "px";
 				if (cell.cellIndex > 1 && row.rowIndex !== 0) {
