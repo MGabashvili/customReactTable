@@ -1,12 +1,3 @@
-table {
-	position: relative;
-	box-shadow: 1px 1px 2px 2px grey;
-	margin: 0 auto;
-	padding: 5px;
-	border-collapse: collapse;
-	transition: all 1s linear;
-}
-
 button {
 	cursor: pointer;
 	text-align: center;
@@ -27,41 +18,23 @@ button:active {
 }
 
 .tableContainer {
-	width: 1200px;
-	height: auto;
 	margin: 0 auto;
+	margin-top: 100px;
+	width: 1200px;
+	height: auto;	
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 }
 
-th {
-	background-color: #9aeba3;
-	color: #012030;
-	font-size: 22px;
-	user-select: none;
-}
 
-th:hover,
-td:hover {
-	cursor: pointer;
-	box-shadow: inset 0px 0px 2.5px 1px black;
-}
-
-td,
-th {
-	padding: 4px 15px 4px 15px;
-	margin: 0;
-	white-space: nowrap;
-	border: 1px solid black;
-	cursor: url("assets/icons8-cursor-32.png");
-	/* transition: all 0.05s linear; */
-}
-
-td:last-child,th:last-child {
-	font-weight: bold;
-	background-color: rgb(247, 183, 5);
-	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-	/* backdrop-filter: blur(4.5px);		 */
-	text-align: center;
+.textInput {
+	margin: 20px;
+	border: 1px solid #1A1E26;
+	width: 100%;
+	height: 4rem;
+	border-radius: 5px;
+	box-shadow: inset 0px 0px 2.5px 1px ;
+	font-size: 2rem;
+	padding: 1rem;
 }

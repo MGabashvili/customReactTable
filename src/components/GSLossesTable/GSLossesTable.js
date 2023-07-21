@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-
+import './style.GSLossesTable.css';
 export default function GSLossesTable(props) {
 	const [ascending, setAscending] = useState(false);
 
